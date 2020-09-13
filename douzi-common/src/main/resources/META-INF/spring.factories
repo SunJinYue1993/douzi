@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.github.sunjinyue1993.common.config.LockMiddlewareAutoConfiguration

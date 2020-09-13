@@ -19,6 +19,12 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <modules>
+        <module>douzi-spring-boot-starter</module>
+        <module>douzi-common</module>
+        <module>douzi-core</module>
+    </modules>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -26,6 +32,22 @@
             <version>1.7.26</version>
         </dependency>
     </dependencies>
+
+    <!-- 统一管理其他模块依赖版本 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.github.sunjinyue1993</groupId>
+                <artifactId>douzi-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sunjinyue1993</groupId>
+                <artifactId>douzi-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
