@@ -11,7 +11,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * @description:
  * TODO: 连接是否可以多人共享，还是独享Watch？ 待验证
- *
+ *          大概率可以共享一个连接，给予每一个人session进行回调
  * @author: sunjy
  * @date: 2020/9/14 上午 12:08
  */
