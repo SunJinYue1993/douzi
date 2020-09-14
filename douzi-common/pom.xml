@@ -22,7 +22,6 @@
 	</properties>
 
 	<dependencies>
-		<!--引入spring-boot-starter；所有starter的基本配置-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -33,7 +32,18 @@
 			<artifactId>zookeeper</artifactId>
 			<version>3.4.14</version>
 		</dependency>
-	</dependencies>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
 
 </project>

@@ -1,4 +1,4 @@
-package com.github.sunjinyue1993.common.entity;
+package com.github.sunjinyue1993.core.entity;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author: sunjy
  * @date: 2020/9/13 下午 11:35
  */
+
 @ConfigurationProperties(prefix = "lock.dependency")
 public class LockDependency {
 

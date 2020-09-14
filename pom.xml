@@ -46,6 +46,12 @@
                 <artifactId>douzi-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.github.sunjinyue1993</groupId>
+                <artifactId>douzi-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
