@@ -1,8 +1,10 @@
 package com.github.sunjinyue1993.core.config;
 
-import com.github.sunjinyue1993.core.entity.DefaultWatch;
+import com.github.sunjinyue1993.core.entity.DefaultConnectionWatch;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.Priority;
 
 /**
  * 配置注册到zk的Watch
@@ -14,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
 public class ZkWatchConfiguration {
 
     @Bean
-    public DefaultWatch getWatch() {
-        return new DefaultWatch();
+    public DefaultConnectionWatch getWatch() {
+        return new DefaultConnectionWatch();
     }
 
 }

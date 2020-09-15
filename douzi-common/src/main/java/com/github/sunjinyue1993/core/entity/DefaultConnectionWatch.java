@@ -5,7 +5,7 @@ import org.apache.zookeeper.Watcher;
 
 import java.util.concurrent.CountDownLatch;
 
-public class DefaultWatch implements Watcher {
+public class DefaultConnectionWatch implements Watcher {
 
     private CountDownLatch init;
 

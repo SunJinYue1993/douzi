@@ -1,6 +1,6 @@
 package com.github.sunjinyue1993.core.config;
 
-import com.github.sunjinyue1993.core.entity.DefaultWatch;
+import com.github.sunjinyue1993.core.entity.DefaultConnectionWatch;
 import com.github.sunjinyue1993.core.entity.LockDependency;
 import org.apache.zookeeper.ZooKeeper;
 import org.springframework.beans.BeansException;
@@ -24,7 +24,7 @@ public class ZkConnection implements ApplicationContextAware {
 
     private LockDependency ld;
 
-    private DefaultWatch watch;
+    private DefaultConnectionWatch watch;
 
     private CountDownLatch count = new CountDownLatch(1);
 
@@ -45,6 +45,6 @@ public class ZkConnection implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext ac) throws BeansException {
         ld = ac.getBean(LockDependency.class);
-        watch = ac.getBean(DefaultWatch.class);
+        watch = ac.getBean(DefaultConnectionWatch.class);
     }
 }
