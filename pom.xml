@@ -22,7 +22,6 @@
     <modules>
         <module>douzi-spring-boot-starter</module>
         <module>douzi-common</module>
-        <module>douzi-core</module>
     </modules>
 
     <dependencies>
@@ -47,11 +46,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.github.sunjinyue1993</groupId>
-                <artifactId>douzi-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
