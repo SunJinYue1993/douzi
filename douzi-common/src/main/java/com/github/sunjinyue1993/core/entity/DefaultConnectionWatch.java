@@ -2,12 +2,15 @@ package com.github.sunjinyue1993.core.entity;
 
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.LockSupport;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DefaultConnectionWatch implements Watcher {
 
-    private CountDownLatch init;
+    private CountDownLatch goOn;
 
     @Override
     public void process(WatchedEvent event) {
@@ -15,12 +18,12 @@ public class DefaultConnectionWatch implements Watcher {
         switch (state) {
             case SyncConnected:
                 System.out.println("Connected...ok...");
-                init.countDown();
+                goOn.countDown();
                 break;
         }
     }
 
-    public void setInit(CountDownLatch init) {
-        this.init = init;
+    public void setGoOn(CountDownLatch goOn) {
+        this.goOn = goOn;
     }
 }

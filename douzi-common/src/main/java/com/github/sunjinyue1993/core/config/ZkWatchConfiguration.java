@@ -16,7 +16,7 @@ import javax.annotation.Priority;
 public class ZkWatchConfiguration {
 
     @Bean
-    public DefaultConnectionWatch getWatch() {
+    public DefaultConnectionWatch defaultConnectionWatch() {
         return new DefaultConnectionWatch();
     }
 
