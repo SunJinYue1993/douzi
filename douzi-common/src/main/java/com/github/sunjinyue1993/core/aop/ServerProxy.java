@@ -1,5 +1,6 @@
 package com.github.sunjinyue1993.core.aop;
 
+import com.github.sunjinyue1993.core.config.ZkConnection;
 import com.github.sunjinyue1993.core.core.Lock;
 import org.apache.zookeeper.ZooKeeper;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.CountDownLatch;
 
 /**
  *
@@ -24,21 +27,24 @@ public class ServerProxy {
     Logger log = LoggerFactory.getLogger("com.github.sunjinyue1993.core.aop.ServerProxy");
 
     @Autowired
-    private ApplicationContext zkConnection;
-
-    @Autowired
     private Lock lock;
 
-    public ZooKeeper getZkConnect() {
-        return (ZooKeeper) zkConnection.getBean("zkConnection");
-    }
+    @Autowired
+    public ZkConnection zkConnection;
+
+    private CountDownLatch cc = new CountDownLatch(1);
 
     @Pointcut("@annotation(com.github.sunjinyue1993.core.aop.LockAnnotation)")
     public void pointCut(){}
 
     @Around("pointCut()")
     public Object invoke(ProceedingJoinPoint invocation) throws Throwable {
+        // 获得连接
+        ZooKeeper zk = zkConnection.zkConnection();
+        zkConnection.setGo(cc);
+        cc.await();
         lock.lock();
+        // 异步
         Object result = invocation.proceed();
         lock.unLock();
         return result;

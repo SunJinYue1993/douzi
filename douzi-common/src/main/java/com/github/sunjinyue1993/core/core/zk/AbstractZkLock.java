@@ -1,23 +1,17 @@
 package com.github.sunjinyue1993.core.core.zk;
 
+import com.github.sunjinyue1993.core.config.ZkConnection;
 import com.github.sunjinyue1993.core.core.ZkLock;
-import com.github.sunjinyue1993.core.entity.DefaultConnectionWatch;
-import com.github.sunjinyue1993.core.entity.LockDependency;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.locks.LockSupport;
-import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class AbstractZkLock implements ZkLock, Watcher, AsyncCallback.StringCallback,
         AsyncCallback.Children2Callback, AsyncCallback.StatCallback {
@@ -26,41 +20,25 @@ public abstract class AbstractZkLock implements ZkLock, Watcher, AsyncCallback.S
 
     ZooKeeper zk;
 
-    ReentrantLock lock = new ReentrantLock();
-
     String pathName;
 
-    @Autowired
-    @Qualifier("defaultConnectionWatch")
-    private DefaultConnectionWatch watch;
-
     CountDownLatch cc = new CountDownLatch(1);
-    CountDownLatch goOn = new CountDownLatch(1);
 
     @Autowired
-    private ApplicationContext ac;
+    private ZkConnection conn;
 
     @Override
     public void lock() {
-        lock.lock();
-        try{
-            System.out.println("start.....");
-            watch.setGoOn(goOn);
-            zk = (ZooKeeper) ac.getBean("zkConnection");
-            goOn.await();
-            System.out.println("end.....");
-        } catch (Exception e) {
-            log.error("get zkConnection error");
-        } finally {
-            lock.unlock();
-        }
-
+        log.info("start get zkConn...");
+        zk = conn.zkConnection();
         try {
-            System.out.println(Thread.currentThread().getName() + "-->>  create....");
-            zk.create("/lock", Thread.currentThread().getName().getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,
+            log.info("Thread create id: " + Thread.currentThread().getName());
+            this.zk.create("/lock", Thread.currentThread().getName().getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,
                     CreateMode.EPHEMERAL_SEQUENTIAL, this, "abc");
+            log.error("ServerProxy" + Thread.currentThread().getName() + "," + Thread.currentThread().getId());
             // 所有线程请求创建节点，进去等待状态，zooleeper返回成功唤起自己线程，进入回调
             cc.await();
+            log.info("zk status: " + this.zk.getState());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -69,6 +47,7 @@ public abstract class AbstractZkLock implements ZkLock, Watcher, AsyncCallback.S
     // StringCallBack
     @Override
     public void processResult(int rc, String path, Object ctx, String name) {
+        log.info("StringCallBack thead id: " + Thread.currentThread().getId());
         if (name != null) {
             System.out.println(Thread.currentThread().getName() + "  create node : " + name);
             pathName = name;
@@ -80,15 +59,12 @@ public abstract class AbstractZkLock implements ZkLock, Watcher, AsyncCallback.S
     // Children2Callback
     @Override
     public void processResult(int rc, String path, Object ctx, List<String> children, Stat stat) {
-
+        log.info("Children2Callback thead id: " + Thread.currentThread().getId());
         Collections.sort(children);
-        //TODO：如果这个节点(\00000022)排在集合里排第一个 -> pathName.substring(1) = 00000022
         int i = children.indexOf(pathName.substring(1));
-
         //是不是第一个
         if (i == 0) {
-            //yes
-            System.out.println(Thread.currentThread().getName() + " i am first....");
+            log.info("The first thread: " + Thread.currentThread().getName());
             try {
                 zk.setData("/", Thread.currentThread().getName().getBytes(), -1);
                 cc.countDown();
@@ -106,8 +82,21 @@ public abstract class AbstractZkLock implements ZkLock, Watcher, AsyncCallback.S
     @Override
     public void process(WatchedEvent event) {
         switch (event.getType()) {
+            case None:
+                log.info("None");
+                break;
+            case NodeCreated:
+                log.info("NodeCreated");
+                break;
             case NodeDeleted:
+                log.info("NodeDeleted");
                 zk.getChildren("/", false, this, "sdf");
+                break;
+            case NodeDataChanged:
+                log.info("NodeDataChanged");
+                break;
+            case NodeChildrenChanged:
+                log.info("NodeChildrenChanged");
                 break;
         }
     }
@@ -115,8 +104,9 @@ public abstract class AbstractZkLock implements ZkLock, Watcher, AsyncCallback.S
     @Override
     public void unLock() {
         try {
+            log.info("unLock thead id: " + Thread.currentThread().getId());
             zk.delete(pathName, -1);
-            System.out.println(Thread.currentThread().getName() + " over work....");
+            log.info(Thread.currentThread().getName() + " over work....");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (KeeperException e) {
@@ -129,4 +119,7 @@ public abstract class AbstractZkLock implements ZkLock, Watcher, AsyncCallback.S
 
     }
 
+    public void setZk(ZooKeeper zk) {
+        this.zk = zk;
+    }
 }

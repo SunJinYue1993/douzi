@@ -8,9 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class DouziCommonApplicationTests {
 
-	@Autowired
-	private ZkConnection zkConnection;
-
 
 	@Test
 	void contextLoads() {
