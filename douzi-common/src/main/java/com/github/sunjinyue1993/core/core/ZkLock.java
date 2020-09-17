@@ -6,6 +6,4 @@ public interface ZkLock extends Lock {
 
     void unLock();
 
-    void other();
-
 }

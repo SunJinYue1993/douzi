@@ -3,9 +3,9 @@ package com.github.sunjinyue1993.core.entity;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @description: 配置存储锁的中间件连接属性
+ * 配置存储锁的中间件连接属性
  * https://docs.spring.io/spring-boot/docs/2.3.3.RELEASE/reference/html/appendix-configuration-metadata.html#configuration-metadata-annotation-processor-metadata-generation
- * @author: sunjy
+ * @author: sunJY
  * @date: 2020/9/13 下午 11:35
  */
 

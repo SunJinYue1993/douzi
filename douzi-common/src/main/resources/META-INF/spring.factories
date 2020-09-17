@@ -1,5 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.github.sunjinyue1993.core.config.LockMiddlewareAutoConfiguration,\
-com.github.sunjinyue1993.core.config.ZkConnection,\
-com.github.sunjinyue1993.core.config.ZkWatchConfiguration,\
 com.github.sunjinyue1993.core.aop.ServerProxy
