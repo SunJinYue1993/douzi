@@ -17,34 +17,31 @@ import java.util.concurrent.CountDownLatch;
 public class DefaultZkLock implements ZkLock, Watcher, AsyncCallback.StringCallback,
         AsyncCallback.Children2Callback, AsyncCallback.StatCallback {
 
-    Logger log = LoggerFactory.getLogger("com.github.sunjinyue1993.core.core.zk.DefaultZkLock");
+    private static Logger log = LoggerFactory.getLogger(DefaultZkLock.class);
 
-    ZooKeeper zk;
+    private ZooKeeper zk;
 
-    String pathName;
+    private String pathName;
 
-    CountDownLatch goOn;
+    private CountDownLatch goOn = new CountDownLatch(1);
 
     @Override
     public void lock() {
-        log.info("start get zkConn...");
+        log.info("DefaultZkLock lock() thread id: " + Thread.currentThread().getId());
         try {
-            log.info("Thread create id: " + Thread.currentThread().getName());
             this.zk.create("/lock", Thread.currentThread().getName().getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,
                     CreateMode.EPHEMERAL_SEQUENTIAL, this, "abc");
-            log.error("ServerProxy" + Thread.currentThread().getName() + "," + Thread.currentThread().getId());
-            // 所有线程请求创建节点，进去等待状态，zooleeper返回成功唤起自己线程，进入回调
+            // 所有线程请求创建节点，进去等待状态，zookeeper返回成功唤起自己线程，进入回调
             goOn.await();
-            log.info("zk status: " + this.zk.getState());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("DefaultZkLock lock() -> goOn.await() be interrupted");
         }
     }
 
     // StringCallBack
     @Override
     public void processResult(int rc, String path, Object ctx, String name) {
-        log.info("StringCallBack thead id: " + Thread.currentThread().getId());
+        log.info("DefaultZkLock StringCallBack thead id: " + Thread.currentThread().getId());
         if (name != null) {
             System.out.println(Thread.currentThread().getName() + "  create node : " + name);
             pathName = name;
@@ -56,7 +53,7 @@ public class DefaultZkLock implements ZkLock, Watcher, AsyncCallback.StringCallb
     // Children2Callback
     @Override
     public void processResult(int rc, String path, Object ctx, List<String> children, Stat stat) {
-        log.info("Children2Callback thead id: " + Thread.currentThread().getId());
+        log.info("DefaultZkLock Children2Callback thead id: " + Thread.currentThread().getId());
         Collections.sort(children);
         int i = children.indexOf(pathName.substring(1));
         //是不是第一个
@@ -83,6 +80,7 @@ public class DefaultZkLock implements ZkLock, Watcher, AsyncCallback.StringCallb
 
     @Override
     public void process(WatchedEvent event) {
+        log.info("DefaultZkLock Watcher thead id: " + Thread.currentThread().getId());
         switch (event.getType()) {
             case None:
                 log.info("None");
@@ -105,10 +103,9 @@ public class DefaultZkLock implements ZkLock, Watcher, AsyncCallback.StringCallb
 
     @Override
     public void unLock() {
+        log.info("DefaultZkLock unLock() thread id: " + Thread.currentThread().getId());
         try {
-            log.info("unLock thead id: " + Thread.currentThread().getId());
             zk.delete(pathName, -1);
-            log.info(Thread.currentThread().getName() + " over work....");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (KeeperException e) {
@@ -125,7 +122,4 @@ public class DefaultZkLock implements ZkLock, Watcher, AsyncCallback.StringCallb
         this.zk = zk;
     }
 
-    public void setGoOn(CountDownLatch goOn) {
-        this.goOn = goOn;
-    }
 }

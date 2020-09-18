@@ -9,9 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -26,7 +23,7 @@ import java.util.concurrent.CountDownLatch;
 @Component
 public class ZkConnection implements ApplicationContextAware {
 
-    Logger log = LoggerFactory.getLogger("com.github.sunjinyue1993.core.config.ZkConnection");
+    private static Logger log = LoggerFactory.getLogger(ZkConnection.class);
 
     private LockDependency ld;
 
