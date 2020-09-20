@@ -1,6 +1,6 @@
-package com.github.sunjinyue1993.core.core.zk;
+package com.github.sunjinyue1993.core.zk;
 
-import com.github.sunjinyue1993.core.core.ZkLock;
+import com.github.sunjinyue1993.core.Lock;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
@@ -14,10 +14,11 @@ import java.util.concurrent.CountDownLatch;
  * @author: SunJY
  * @date: 2020/9/17
  */
-public class DefaultZkLock implements ZkLock, Watcher, AsyncCallback.StringCallback,
+@Deprecated
+public class AsyncZkLock implements Lock, Watcher, AsyncCallback.StringCallback,
         AsyncCallback.Children2Callback, AsyncCallback.StatCallback {
 
-    private static Logger log = LoggerFactory.getLogger(DefaultZkLock.class);
+    private static Logger log = LoggerFactory.getLogger(AsyncZkLock.class);
 
     private ZooKeeper zk;
 
@@ -102,7 +103,7 @@ public class DefaultZkLock implements ZkLock, Watcher, AsyncCallback.StringCallb
     }
 
     @Override
-    public void unLock() {
+    public void unlock() {
         log.info("DefaultZkLock unLock() thread id: " + Thread.currentThread().getId());
         try {
             zk.delete(pathName, -1);

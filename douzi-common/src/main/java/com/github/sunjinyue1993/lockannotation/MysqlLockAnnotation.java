@@ -1,4 +1,4 @@
-package com.github.sunjinyue1993.core.aop;
+package com.github.sunjinyue1993.lockannotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 /**
  * 加在竞争统一资源的方法上，分布式锁生效
+ *
  * @author: SunJY
  * @date: 2020/9/17
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LockAnnotation {
-
+public @interface MysqlLockAnnotation {
 }

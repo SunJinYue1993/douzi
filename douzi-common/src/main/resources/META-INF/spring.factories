@@ -1,3 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.sunjinyue1993.core.config.LockMiddlewareAutoConfiguration,\
-com.github.sunjinyue1993.core.aop.ServerProxy
+com.github.sunjinyue1993.config.LockAutoConfiguration
