@@ -24,8 +24,6 @@ public class ServerProxy {
 
     private static Logger log = LoggerFactory.getLogger(ServerProxy.class);
 
-//    private MysqlLock lock = new MysqlLock();
-
     @Autowired
     private Lock lock;
 
