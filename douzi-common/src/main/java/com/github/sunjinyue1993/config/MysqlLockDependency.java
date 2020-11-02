@@ -1,6 +1,8 @@
 package com.github.sunjinyue1993.config;
 
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,12 +25,6 @@ public class MysqlLockDependency {
 
     @Value("${spring.datasource.password}")
     private String password;
-
-    @Value("${spring.datasource.dbcp2.initial-size}")
-    private String initSize;
-
-    @Value("${spring.datasource.dbcp2.max-total}")
-    private String maxSize;
 
     public String getDriver() {
         return driver;
@@ -62,22 +58,6 @@ public class MysqlLockDependency {
         this.password = password;
     }
 
-    public String getInitSize() {
-        return initSize;
-    }
-
-    public void setInitSize(String initSize) {
-        this.initSize = initSize;
-    }
-
-    public String getMaxSize() {
-        return maxSize;
-    }
-
-    public void setMaxSize(String maxSize) {
-        this.maxSize = maxSize;
-    }
-
     @Override
     public String toString() {
         return "MysqlLockDependency{" +
@@ -85,8 +65,6 @@ public class MysqlLockDependency {
                 ", url='" + url + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", initSize='" + initSize + '\'' +
-                ", maxSize='" + maxSize + '\'' +
                 '}';
     }
 }

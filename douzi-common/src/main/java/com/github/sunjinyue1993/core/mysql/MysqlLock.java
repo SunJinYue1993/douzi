@@ -2,13 +2,18 @@ package com.github.sunjinyue1993.core.mysql;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.github.sunjinyue1993.core.Lock;
+import com.github.sunjinyue1993.core.redis.RedisLock;
 import com.github.sunjinyue1993.entity.TblMysqlLock;
 import com.github.sunjinyue1993.util.DBUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 
+@Component
+@ConditionalOnMissingBean(RedisLock.class)
 public class MysqlLock implements Lock {
 
     private static Logger log = LoggerFactory.getLogger(MysqlLock.class);

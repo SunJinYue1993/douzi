@@ -7,6 +7,4 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan(basePackages = "com.github.sunjinyue1993.*")
 public class LockAutoConfiguration {
 
-
-
 }

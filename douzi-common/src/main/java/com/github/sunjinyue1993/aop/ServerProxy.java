@@ -1,5 +1,6 @@
 package com.github.sunjinyue1993.aop;
 
+import com.github.sunjinyue1993.core.Lock;
 import com.github.sunjinyue1993.core.mysql.MysqlLock;
 import com.github.sunjinyue1993.entity.TblMysqlLock;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -8,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,11 +24,14 @@ public class ServerProxy {
 
     private static Logger log = LoggerFactory.getLogger(ServerProxy.class);
 
-    private MysqlLock lock = new MysqlLock();
+//    private MysqlLock lock = new MysqlLock();
+
+    @Autowired
+    private Lock lock;
 
     private ThreadLocal<TblMysqlLock> threadLocal = new ThreadLocal<>();
 
-    @Pointcut("@annotation(com.github.sunjinyue1993.lockannotation.MysqlLockAnnotation)")
+    @Pointcut("@annotation(com.github.sunjinyue1993.lockannotation.MysqlLock)")
 
     public void pointCut(){}
 
