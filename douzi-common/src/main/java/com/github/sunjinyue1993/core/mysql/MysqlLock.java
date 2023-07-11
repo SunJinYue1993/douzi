@@ -26,7 +26,7 @@ public class MysqlLock implements Lock {
         if (tryLock()) {
             return;
         }
-        //TODO: 2.休眠 -> 考虑AQS的CHL队列,阻塞加锁
+        //TODO: 2.休眠 -> 其实可以参考xxl-job的for update和雪花算法项目的自旋锁
         try {
             Thread.sleep(10);
         } catch (InterruptedException e) {
